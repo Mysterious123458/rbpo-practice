@@ -1,0 +1,56 @@
+# Практическая работа 01: сборка, тесты и упаковка на агенте группы.
+# Описание синтаксиса: https://docs.gitflic.ru/latest/cicd/gitflic-ci-yaml/
+
+stages:
+  - build
+  - test
+  - package
+
+variables:
+  MAVEN_CLI_OPTS: "-B -ntp"
+
+default:
+  image:
+    name: maven:3.9.9-eclipse-temurin-21
+    pull_policy: if-not-present
+  cache:
+    key: maven-repo
+    paths:
+      - .m2/repository/
+
+build:
+  stage: build
+  tags:
+    - barkov
+  script:
+    - mvn $MAVEN_CLI_OPTS clean compile
+
+test:
+  stage: test
+  tags:
+    - barkov
+  script:
+    - mvn $MAVEN_CLI_OPTS test
+  artifacts:
+    when: always
+    paths:
+      - target/surefire-reports/
+    reports:
+      junit:
+        paths:
+          - target/surefire-reports/TEST-*.xml
+    expire_in: 1 week
+
+package:
+  stage: package
+  tags:
+    - barkov
+  script:
+    - mvn $MAVEN_CLI_OPTS package
+    - sha256sum target/course-management-0.0.1-SNAPSHOT.jar > target/jar.sha256
+    - echo "commit SHA: $CI_COMMIT_SHA"
+  artifacts:
+    paths:
+      - target/course-management-0.0.1-SNAPSHOT.jar
+      - target/jar.sha256
+    expire_in: 1 week
