@@ -8,6 +8,7 @@ class CourseManagementApplicationTests {
 
     @Test
     void contextLoads() {
+        org.junit.jupiter.api.Assertions.fail("Контрольное падение для проверки реакции конвейера");
     }
 
 }
