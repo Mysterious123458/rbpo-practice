@@ -25,5 +25,8 @@ server:
   error:
     include-stacktrace: ALWAYS
 app:
+  admin:
+    # Токен тестового защищённого маршрута: только из переменных окружения CI/CD.
+    token: ${APP_ADMIN_TOKEN:}
   plugin:
     url:

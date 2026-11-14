@@ -1,0 +1,172 @@
+openapi: 3.0.3
+info:
+  title: course-management API
+  version: "1.0"
+  description: Учебная спецификация для DAST и фаззинга (практическая работа 05)
+servers:
+  - url: /
+paths:
+  /api/students:
+    get:
+      summary: Список студентов
+      operationId: listStudents
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Student"
+  /api/students/{id}:
+    get:
+      summary: Студент по идентификатору
+      operationId: getStudent
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+        "404":
+          description: Не найден
+    delete:
+      summary: Удалить студента
+      operationId: deleteStudent
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: Удалён
+  /api/courses:
+    get:
+      summary: Список курсов
+      operationId: listCourses
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Course"
+  /api/courses/{id}:
+    get:
+      summary: Курс по идентификатору
+      operationId: getCourse
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Course"
+        "404":
+          description: Не найден
+  /api/courses/search:
+    get:
+      summary: Поиск курсов по точному названию
+      operationId: searchCourses
+      parameters:
+        - name: title
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Course"
+  /api/xml/parse:
+    post:
+      summary: Разбор XML
+      operationId: parseXml
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+      responses:
+        "200":
+          description: Текст корневого элемента
+  /api/admin/stats:
+    get:
+      summary: Статистика (защищённый маршрут)
+      operationId: adminStats
+      security:
+        - adminToken: []
+      parameters:
+        - name: X-Admin-Token
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Токен отсутствует или неверен
+components:
+  schemas:
+    Student:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        email:
+          type: string
+        userId:
+          type: integer
+          format: int64
+          nullable: true
+    Course:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        teacherId:
+          type: integer
+          format: int64
+          nullable: true
+  securitySchemes:
+    adminToken:
+      type: apiKey
+      in: header
+      name: X-Admin-Token
