@@ -31,6 +31,15 @@ mvn spring-boot:run   # запуск приложения
 Агент группы с тегом `barkov`, образ `maven:3.9.9-eclipse-temurin-21` (pull_policy: if-not-present),
 кэш локального репозитория Maven — только для ускорения.
 
+## Конвейер (полный, после практических работ 02–05)
+
+Секреты (Gitleaks) → сборка и тесты → SAST (Semgrep) → SCA (Dependency-Check) и SBOM (CycloneDX) →
+образ (Docker) → проверки (Trivy config + image) → публикация в реестр по тегу коммита →
+развёртывание по digest → DAST (ZAP Baseline + API Scan) → фаззинг (Schemathesis) → очистка.
+
+Блокирующие пороги: любой секрет; SAST/SCA/образ — ERROR/High/Critical; DAST — FAIL-находки;
+фаззинг — необработанные 5xx. Все отчёты сохраняются как артефакты, включая неуспешные запуски.
+
 ## Версии инструментов
 
 - JDK: Temurin 21.0.9 (локально; в CI — eclipse-temurin-21 внутри образа Maven)
