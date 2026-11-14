@@ -1,0 +1,22 @@
+# Сборка Maven
+target/
+
+# Локальные настройки и секреты
+.env
+*.env
+*.local
+secrets/
+*.p12
+*.key
+
+# IDE и ОС
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+.DS_Store
+
+# Логи
+*.log
