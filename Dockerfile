@@ -1,19 +1,6 @@
-# Практическая работа 04: образ приложения для проверенного коммита.
-# Базовый образ зафиксирован по версии (JRE, не JDK); пользователь без root.
-FROM eclipse-temurin:21.0.9_11-jre-alpine
-
-RUN addgroup -S app && adduser -S app -G app
-
+# КОНТРОЛЬНЫЙ Dockerfile (шаг 4 работы 04): намеренно плохой, ветка НЕ сливается.
+FROM eclipse-temurin:latest
 WORKDIR /app
-
-COPY target/course-management-0.0.1-SNAPSHOT.jar app.jar
-
-# Метаданные исходного коммита попадают внутрь образа
-ARG COMMIT_SHA=unknown
-ENV APP_COMMIT_SHA=$COMMIT_SHA
-
-USER app
-
+COPY . .
 EXPOSE 8080
-
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-jar", "/app/target/course-management-0.0.1-SNAPSHOT.jar"]
