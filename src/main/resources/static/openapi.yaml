@@ -134,6 +134,13 @@ paths:
           description: OK
         "401":
           description: Токен отсутствует или неверен
+  /api/debug/crash:
+    get:
+      summary: Контрольный эндпоинт с необработанной ошибкой 500 (ветка не сливается)
+      operationId: debugCrash
+      responses:
+        "500":
+          description: Контрольная ошибка
 components:
   schemas:
     Student:
