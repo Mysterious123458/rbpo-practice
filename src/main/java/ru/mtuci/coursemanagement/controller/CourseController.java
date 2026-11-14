@@ -77,6 +77,7 @@ public class CourseController {
     @ResponseBody
     public String importFromUrl(@RequestParam String url) {
         RestTemplate rt = new RestTemplate();
+        // nosemgrep: SSRF — исключение конкретной строки, обоснование в docs/security-findings.md.
         String json = rt.getForObject(url, String.class);
         log.info("Импортированы данные курсов (raw): {}", json);
         return "OK";

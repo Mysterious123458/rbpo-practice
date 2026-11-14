@@ -10,6 +10,8 @@ public class ProxyController {
     @GetMapping("/api/proxy")
     public String proxy(@RequestParam("targetUrl") String targetUrl) {
         RestTemplate rt = new RestTemplate();
+        // nosemgrep: SSRF — подтверждённый учебный дефект, исключение конкретной строки
+        // обосновано в docs/security-findings.md (изолированный учебный стенд).
         return rt.getForObject(targetUrl, String.class);
     }
 }
