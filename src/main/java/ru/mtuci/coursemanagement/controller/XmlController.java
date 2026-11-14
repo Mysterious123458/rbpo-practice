@@ -14,6 +14,10 @@ public class XmlController {
     @PostMapping(value = "/api/xml/parse", consumes = {MediaType.TEXT_XML_VALUE, MediaType.APPLICATION_XML_VALUE})
     public String parse(@RequestBody String xml) throws Exception {
         SAXReader reader = new SAXReader();
+        // Исправление CWE-611: запрещаем DTD и внешние сущности при разборе XML.
+        reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        reader.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        reader.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
         Document doc = reader.read(new StringReader(xml));
         return doc.getRootElement().getText();
     }
